@@ -66,4 +66,5 @@ Environment VariablesSet up a .env file in your root folder with the following c
 ├── .gitignore                 # Exclusion filter files hiding hidden folders and node_modules
 ├── app.js                     # Core application bootstrap runtime engine and server hub
 ├── package.json               # Manifest file registering dependencies and execution hooks
-└── seed.js                    # Database purge script injecting clean demonstration d
+└── seed.js                    # Database purge script injecting clean demonstration 
+github link : https://github.com/EyadMo-2008/ecommerce-api.git
