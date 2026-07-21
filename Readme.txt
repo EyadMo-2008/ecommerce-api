@@ -1,97 +1,67 @@
 # E-Commerce Backend API
 
-A complete, production-ready RESTful API built for e-commerce applications using Node.js, Express.js, MongoDB, and Mongoose. This project is built following clean architecture and best practices, featuring centralized error handling, input data sanitization, robust query filtering with pagination, full shopping cart management, and an automated database seeder.
+A complete, production-ready RESTful API built for e-commerce applications using Node.js, Express.js, MongoDB, and Mongoose. This project follows the MVC architecture and best practices, featuring centralized error handling, input data sanitization, dynamic query filtering, full shopping cart management, and order processing.
 
 ---
 
 ## Features
-- **Dynamic Category Management:** Full CRUD operations for product categories, featuring automated slug generation that formats titles into lowercase, hyphen-separated strings.
-- **Advanced Product Catalog Search:** A flexible product querying engine supporting text search, granular multi-parameter filtering (by category, price ranges, and stock), custom sorting, and pagination with dynamic page limits.
-- **Shopping Cart State System:** Real-time cart management that tracks active items, calculates totals dynamically, syncs updates automatically, and validates requests against current inventory levels to prevent overselling.
-- **Secure Transactional Checkout:** A secure checkout pipeline that converts cart items into orders, generates unique order tracking numbers (formatted as `ORD-TIMESTAMP-RANDOM`), and performs atomic database updates to decrement stock.
-- **Security & Data Validation:** Out-of-the-box protection against NoSQL injection attacks using dedicated middleware, combined with strict Mongoose schema validation rules and a global operational error interceptor (`AppError`).
+- **MVC Architecture:** Clean, modular, and maintainable codebase structure.
+- **Categories API:** Full CRUD operations for managing product categories.
+- **Products API:** Dynamic filtering (by category, price range, stock, search), full CRUD, and populated category details.
+- **Cart API:** Real-time cart management with server-side price validation, stock validation, and total price calculation.
+- **Orders API:** Complete checkout pipeline converting cart items into orders, updating product stock, and tracking status.
+- **Security & Validation:** Protection against NoSQL injection using express-mongo-sanitize, schema validations, and global error handling via AppError.
 
 ---
 
 ## Tech Stack
-# E-Commerce Backend API
+- **Runtime Environment:** Node.js
+- **Framework:** Express.js
+- **Database:** MongoDB
+- **ODM:** Mongoose
 
-A RESTful E-Commerce Backend API built with Node.js, Express, and MongoDB using the MVC architecture.
+---
 
-## Project Structure
+## Environment Variables
 
-ecommerce-api/
-├── config/
-│   ├── config.js
-│   └── db.js
-├── controllers/
-│   ├── categoryController.js
-│   ├── productController.js
-│   ├── cartController.js
-│   └── orderController.js
-├── middleware/
-│   ├── asyncHandler.js
-│   └── errorHandler.js
-├── models/
-│   ├── Category.js
-│   ├── Product.js
-│   ├── Cart.js
-│   └── Order.js
-├── routes/
-│   ├── categoryRoutes.js
-│   ├── productRoutes.js
-│   ├── cartRoutes.js
-│   └── orderRoutes.js
-├── utils/
-│   └── appError.js
-├── .env
-├── .gitignore
-├── app.js
-├── package.json
-├── README.md
-└── seed.js
-Features
-MVC Architecture: Organized and maintainable codebase.
+| Variable | Description | Example Value |
+| :--- | :--- | :--- |
+| `PORT` | The port number on which the server runs | `5000` |
+| `NODE_ENV` | The environment mode (development/production) | `development` |
+| `MONGO_URI` | MongoDB connection string | `mongodb://127.0.0.1:27017/ecommerce_db` |
 
-MongoDB Integration: Database modeling using Mongoose.
+---
 
-Security: Basic NoSQL injection prevention using express-mongo-sanitize.
+## Prerequisites & Installation
 
-Global Error Handling: Centralized error management system.
+### Prerequisites
+Make sure you have the following installed on your system:
+- Node.js (v18 or higher)
+- MongoDB
+- npm (Node Package Manager)
 
-Tech Stack
-Node.js: JavaScript runtime environment.
+### Installation Steps
 
-Express.js: Web framework for Node.js.
-
-MongoDB: NoSQL Database.
-
-Mongoose: ODM library for MongoDB.
-
-Getting Started
-Prerequisites
-Make sure you have Node.js and MongoDB installed on your system.
-
-Installation
-Clone the repository:
-
-Bash
-git clone https://github.com/EyadMo-2008/ecommerce-api.git
-Navigate to the project directory:
-
-Bash
-cd ecommerce-api
+1. **Clone the repository:**
+   ```bash
+   git clone [https://github.com/EyadMo-2008/ecommerce-api.git](https://github.com/EyadMo-2008/ecommerce-api.git)
+   cd ecommerce-api
 Install dependencies:
 
 Bash
 npm install
-Create a .env file in the root directory and set your environment variables:
+Set up environment variables:
+Create a .env file in the root directory based on the table above:
 
 Code snippet
 PORT=5000
 NODE_ENV=development
 MONGO_URI=mongodb://127.0.0.1:27017/ecommerce_db
-Run the application:
+Seed initial database (Optional):
+
+Bash
+npm run seed
+Run the server:
 
 For development mode:
 
@@ -101,4 +71,82 @@ For production mode:
 
 Bash
 npm start
+API Endpoints List
+Categories
+GET /api/categories - Fetch all categories
+
+GET /api/categories/:id - Fetch category by ID
+
+POST /api/categories - Create a new category
+
+PATCH /api/categories/:id - Update a category
+
+DELETE /api/categories/:id - Delete a category
+
+Products
+GET /api/products - Get all products (Supports: ?category=, ?minPrice=, ?maxPrice=, ?inStock=, ?search=)
+
+GET /api/products/:id - Get product by ID (Populates category)
+
+POST /api/products - Create a product (Validates category existence)
+
+PATCH /api/products/:id - Update product
+
+DELETE /api/products/:id - Delete product
+
+Cart
+GET /api/cart - View cart items and total price
+
+POST /api/cart/items - Add item to cart
+
+PATCH /api/cart/items/:productId - Update item quantity
+
+DELETE /api/cart/items/:productId - Remove item from cart
+
+DELETE /api/cart - Clear entire cart
+
+Orders
+GET /api/orders - Get all orders
+
+GET /api/orders/:id - Get order by ID
+
+POST /api/orders - Checkout / Create order from cart
+
+PATCH /api/orders/:id/status - Update order status (pending, confirmed, shipped, delivered, cancelled)
+
+Project Structure
+Plaintext
+ecommerce-api/
+├── config/             # Database and app configurations
+│   ├── config.js
+│   └── db.js
+├── controllers/        # Request handlers and business logic
+│   ├── categoryController.js
+│   ├── productController.js
+│   ├── cartController.js
+│   └── orderController.js
+├── middleware/         # Custom Express middlewares
+│   ├── asyncHandler.js
+│   └── errorHandler.js
+├── models/             # Mongoose schemas
+│   ├── Category.js
+│   ├── Product.js
+│   ├── Cart.js
+│   └── Order.js
+├── postman/            # Postman collection folder
+│   └── postman_collection.json
+├── routes/             # Express API route definitions
+│   ├── categoryRoutes.js
+│   ├── productRoutes.js
+│   ├── cartRoutes.js
+│   └── orderRoutes.js
+├── utils/              # Utility functions and AppError class
+│   └── appError.js
+├── .gitignore
+├── app.js
+├── package.json
+├── README.md
+└── seed.js
+API Testing (Postman)
+An exported Postman Collection is located at postman/postman_collection.json. Import it into your Postman application to test all system endpoints seamlessly.
 github link : https://github.com/EyadMo-2008/ecommerce-api.git
