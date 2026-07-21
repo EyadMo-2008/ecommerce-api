@@ -76,7 +76,7 @@ Installation
 Clone the repository:
 
 Bash
-git clone <YOUR_REPOSITORY_URL>
+git clone < https://github.com/EyadMo-2008/ecommerce-api.git>
 Navigate to the project directory:
 
 Bash
