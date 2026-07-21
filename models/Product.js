@@ -1,43 +1,38 @@
 const mongoose = require('mongoose');
 
-const productSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, 'Please add a product name'],
-    trim: true
+const productSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, 'A product must have a name'],
+      trim: true,
+    },
+    price: {
+      type: Number,
+      required: [true, 'A product must have a price'],
+      min: [0, 'Price must be a positive number'],
+    },
+    description: {
+      type: String,
+      trim: true,
+    },
+    quantity: {
+      type: Number,
+      required: [true, 'A product must have a stock quantity'],
+      min: [0, 'Quantity cannot be negative'],
+      default: 0,
+    },
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Category',
+      required: [true, 'A product must belong to a category'],
+    },
   },
-  description: {
-    type: String,
-    required: [true, 'Please add a product description']
-  },
-  price: {
-    type: Number,
-    required: [true, 'Please add a product price'],
-    min: [0, 'Price cannot be negative']
-  },
-  category: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Category',
-    required: [true, 'Please specify a category']
-  },
-  stock: {
-    type: Number,
-    required: [true, 'Please add stock count'],
-    default: 0
-  },
-  images: {
-    type: [String],
-    default: []
-  },
-  inStock: {
-    type: Boolean,
-    default: true
+  {
+    timestamps: true,
   }
-}, { timestamps: true });
+);
 
-productSchema.pre('save', function(next) {
-  this.inStock = this.stock > 0;
-  next();
-});
+const Product = mongoose.model('Product', productSchema);
 
-module.exports = mongoose.model('Product', productSchema);
+module.exports = Product;
